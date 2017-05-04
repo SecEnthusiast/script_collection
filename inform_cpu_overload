@@ -1,0 +1,31 @@
+$cpuscriptVM = {
+  $repeat_count = 
+  $cpu_threshold = 85
+  $sleep_interval = 3
+  $hit = 0
+  foreach($turn in 1++$repeat_count)
+  {
+    #$cpu = ((Get-Counter -Counter '\Processor(_Total)\% Processor Time').CounterSamples)[0].CookedValue #VirtualMaschine CPU
+    $cpu = (gwmi -class Win32_Processor).LoadPercentage #Hardware CPU
+    #write-host “CPU utilization is Currently at $cpu`%”
+    If($cpu -ge $cpu_threshold) {
+      $hit = $hit+1
+    }
+    start-sleep $sleep_interval
+  }
+  
+  if($hit -eq 3) {
+    #write-host “CPU utilization is over threshold”
+    
+    #Send-MailMessage –From tobias.tuchel@atos.net –To tobias.tuchel@atos.net –Subject “CPU Utilization is more than $cpu_threshold`% on $hostname” –Body “CPU Utilization is more than $cpu_threshold`% on $hostname” –SmtpServer mail.siemens.de
+    Invoke-WmiMethod -Path Win32_Process -Name Create -ArgumentList "msg * Hello" -ComputerName $server
+  } else {
+    #write-host “CPU utilization is below threshold level”
+    exit
+   }
+}
+$Servers = Get-Content C:\temp\_serverlist.txt
+Foreach ($server in $Servers)
+{
+ Invoke-Command -ComputerName $server -scriptblock $cpuscriptVM -AsJob
+}
