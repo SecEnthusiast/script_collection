@@ -1,0 +1,11 @@
+Write-Host "Portcheckscript PS"
+Write-Host " "
+
+$hostcheck = Read-Host "Servername / IP?"
+
+Write-Host " "
+
+$portcheck = Read-Host "Port?"
+
+$iar = (new-object Net.Sockets.TcpClient).Connect($hostcheck, $portcheck)
+Write-Host "Verbindung erfolgreich"
