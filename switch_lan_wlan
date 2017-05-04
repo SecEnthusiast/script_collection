@@ -1,0 +1,31 @@
+$gigabitlan = Get-WmiObject win32_networkadapter | where {$_.DeviceID -eq 7} #"check for your responsible Get-WmiObject win32_networkadapter ID"
+$wireless = Get-WmiObject win32_networkadapter | where {$_.DeviceID -eq 16} #"check for your responsible Get-WmiObject win32_networkadapter ID"
+
+Write-Host "1. Disable LAN / Enable WLAN?"
+Write-Host "2. Disable WLAN / Enable LAN?"
+Write-Host "3. Exit"
+Write-Host " "
+
+$input = Read-Host "your choice"
+
+Write-Host " "
+
+switch($input)
+{
+
+1
+{
+$gigabitlan.Disable()
+Start-Sleep -s 3
+$wireless.Enable()
+}
+2 
+{
+$wireless.Disable()
+Start-Sleep -s 3
+$gigabitlan.Enable()
+}
+3
+{
+break;
+}
