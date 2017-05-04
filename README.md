@@ -1,2 +1,2 @@
 # script_collection
-Script Collection to do easy stuff
+Script collection to do easy stuff
