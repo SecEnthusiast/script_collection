@@ -1,0 +1,33 @@
+# 
+# Scanengine Update Serverprotect Server 64 bit
+
+$filesource = "server.domain.net"
+# $computer = gc env:computername
+$Service1 = "vsapint"
+#$Sercice2 = "tmfilter"
+$SPPsthlocal = "C:\Program Files\Trend\SProtect\x64\"
+# Stop Services
+$Service1 + " is now " + (Get-Service $Service1).status
+Stop-Service $Service1 -force
+$Service1 + " is now " + (Get-Service $Service1).status
+Start-Sleep -s 60
+#$Service2 + " is now " + (Get-Service $Service2).status
+#$Service2 + " is now " + (Get-Service $Service2).status
+#Backup Job
+New-Item -path $SPPsthlocal -name backup -type directory
+Copy-Item "C:\Program Files\Trend\SProtect\x64\tmpreflt.sys" -Destination 'C:\Program Files\Trend\SProtect\x64\backup' -force
+Copy-Item "C:\Program Files\Trend\SProtect\x64\tmxpflt.sys" -Destination 'C:\Program Files\Trend\SProtect\x64\backup' -force
+Copy-Item "C:\Program Files\Trend\SProtect\x64\VsapiNT.sys" -Destination 'C:\Program Files\Trend\SProtect\x64\backup' -force
+#Copy Job
+Copy-Item "\\$filesource\d$\SP EMC\update\scanengine\VSAPI-KD-AMD64-9.500-1005\tmpreflt.sys" -Destination "C:\Program Files\Trend\SProtect\x64\tmpreflt.sys" -force
+Copy-Item "\\$filesource\d$\SP EMC\update\scanengine\VSAPI-KD-AMD64-9.500-1005\tmxpflt.sys" -Destination "C:\Program Files\Trend\SProtect\x64\tmxpflt.sys" -force
+Copy-Item "\\$filesource\d$\SP EMC\update\scanengine\VSAPI-KD-AMD64-9.500-1005\VsapiNT.sys" -Destination "C:\Program Files\Trend\SProtect\x64\VsapiNT.sys" -force
+# Start Services
+Start-Sleep -s 5
+$Service1 + " is now " + (Get-Service $Service1).status
+Start-Service $Service1
+$Service1 + " is now " + (Get-Service $Service1).status
+Start-Sleep -s 60
+#$Service2 + " is now " + (Get-Service $Service2).status
+#Start-Service $Service2
+#$Service2 + " is now " + (Get-Service $Service2).status
